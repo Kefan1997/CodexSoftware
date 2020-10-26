@@ -1,80 +1,20 @@
 import React, { useState } from "react";
 import ReactDOM from "react-dom";
+// import classNames from "classnames";
 import "./index.css";
-
-function Square(props) {
-  return (
-    <span className="square" onClick={props.onClick}>
-      {props.value}
-    </span>
-  );
-}
-
-function Raw(arrayCanvas, countOfColumns, countOfRows) {
-  
-  const createSquares = arrayCanvas.map((square, index) => (
-    <span className="square" key={index} id={index}>
-      
-    </span>
-  ));
-  // const row;
-  const arrayRows = new Array(countOfRows).map((row, index) => (
-    <div className="board-row" key={index}></div>
-  ));
-  
-  return <div className="board-row"></div>;
-}
-
-class Board extends React.Component {
-  renderSquare(i) {
-    return <Square value={i} />;
-  }
-
-  render() {
-    const status = "Canvas";
-
-    return (
-      <div>
-        <div className="status">{status}</div>
-        <div className="board-row">
-          {this.renderSquare()}
-          {this.renderSquare()}
-          {this.renderSquare()}
-        </div>
-        <div className="board-row">
-          {this.renderSquare()}
-          {this.renderSquare()}
-          {this.renderSquare()}
-        </div>
-        <div className="board-row">
-          {this.renderSquare()}
-          {this.renderSquare()}
-          {this.renderSquare()}
-        </div>
-        <div className="board-row">
-          {this.renderSquare()}
-          {this.renderSquare()}
-          {this.renderSquare()}
-        </div>
-      </div>
-    );
-  }
-}
 
 function Canvas() {
   const [countOfRows, setCountOfRows] = useState(4);
   const [countOfColumns, setCountOfColumns] = useState(20);
+  const [lineBreak, setLineBreak] = useState(null);
+  const [arrayCanvas, setArrayCanvas] = useState([]);
 
-  const arrayCanvas = [];
-  console.log(arrayCanvas);
-
-  const drawCanvas = (raws, columns) => {
-    // setCountOfRaws(raws);
-    // setCountOfColumns(columns);
+  const drawCanvas = () => {
     console.log(`raws: ${countOfRows}, columns: ${countOfColumns}`);
-    arrayCanvas.length = countOfColumns * countOfRows;
-    arrayCanvas.fill({ color: "white" });
-    console.log(arrayCanvas);
+    setLineBreak(countOfColumns);
+    setArrayCanvas(
+      new Array(countOfRows * countOfColumns).fill({ color: "white" })
+    );
   };
 
   return (
@@ -85,8 +25,11 @@ function Canvas() {
           <br />
           <input
             type="number"
+            name="Rows"
             value={countOfRows}
-            onChange={(event) => setCountOfRows(event.target.value)}
+            onChange={(event) => {
+              setCountOfRows(event.target.value);
+            }}
           />
           <br />
           <br />
@@ -94,8 +37,11 @@ function Canvas() {
           <br />
           <input
             type="number"
+            name="Columns"
             value={countOfColumns}
-            onChange={(event) => setCountOfColumns(event.target.value)}
+            onChange={(event) => {
+              setCountOfColumns(event.target.value);
+            }}
           />
           <br />
           <br />
@@ -107,7 +53,26 @@ function Canvas() {
         </form>
       </div>
       <div className="canvas-board">
-        <Board />
+        <div>
+          <div className="status">Canvas</div>
+          <div className="board-row">
+            {arrayCanvas.map((square, index) =>
+              (index + 1) % lineBreak === 0 ? (
+                <React.Fragment>
+                  <span
+                    className="square"
+                    style={{ background: square.color }}
+                    key={index}
+                    id={index}
+                  ></span>
+                  <br />
+                </React.Fragment>
+              ) : (
+                <span className="square" style={{ background: square.color }} key={index} id={index}></span>
+              )
+            )}
+          </div>
+        </div>
       </div>
       <div className="canvas-info">
         <div>{/* status */}</div>
