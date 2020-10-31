@@ -12,27 +12,35 @@ function Canvas() {
   const [x2, setX2] = useState(2);
   const [y2, setY2] = useState(4);
 
-  const getCoordinate = (x, y) => x + countOfColumns * y;
+  const getCoordinate = (x, y) => (x + (countOfColumns * y));
 
   const drawHorizontal = (min, max) => {
     console.log('arrayCanvas in function drawHorizontal:', arrayCanvas);
-    const arrayWithHorizontalLine = arrayCanvas.map((square, index) => {
-      const obj = {...square, color: index <= max && index >= min ? "red" : "white"};
-      return obj;
+    const arrayWithHorizontalLines = arrayCanvas.map((square, index) => {
+      // const obj = {...square, color: index <= max && index >= min ? "red" : ...square};
+      if(index <= max && index >= min) {
+        const obj = {...square, color: "red"};
+        return obj;
+      } else {
+        const obj = {...square};
+        return obj;
+      }
     });
-    console.log('arrayWithHorizontalLine in function drawHorizontal:',arrayWithHorizontalLine);
-    return arrayWithHorizontalLine;
+    console.log('arrayWithHorizontalLine in function drawHorizontal:',arrayWithHorizontalLines);
+    return arrayWithHorizontalLines;
   };
   
-
   const drawVertical = (min, max) => {
-    const copyArray = arrayCanvas;
-    console.log('copyArray in function drawVertical:', copyArray);
-    for (let i = min; i <= max; i += lineBreak) {
-      copyArray[i] = {...copyArray[i], color: 'red'};
-    }
-    console.log(copyArray);
-    // return copyArray;
+    const arrayVerticalLines = arrayCanvas.map((square, index) => {
+      if(index >= min && index <= max && ((index - min) % lineBreak) === 0) {
+        const obj = {...square, color: 'red'};
+        return obj;
+      } else {
+        const obj = {...square};
+        return obj;
+      }
+    })
+    return arrayVerticalLines;
   }
 
   const drawLine = (x1, y1, x2, y2) => {
@@ -46,16 +54,14 @@ function Canvas() {
       console.log(`x2: ${x2}`);
       console.log(`y2: ${y2}`);
 
-      const firstCoordinate = getCoordinate(x1, y1);
+      const min = Math.min(getCoordinate(x1, y1), getCoordinate(x2, y2));
 
-      const secondCoordinate = getCoordinate(x2, y2);
+      const max = Math.max(getCoordinate(x1, y1), getCoordinate(x2, y2));
 
-      const min = Math.min(firstCoordinate, secondCoordinate);
+      console.log(`countOfColumns: ${countOfColumns}`);
 
-      const max = Math.max(firstCoordinate, secondCoordinate);
-
-      console.log(`firstCoordinate: ${firstCoordinate}`);
-      console.log(`secondCoordinate: ${secondCoordinate}`);
+      console.log(`min: ${min}`);
+      console.log(`max: ${max}`);
 
       if (y1 === y2) {
         console.log('here 1')
@@ -85,7 +91,7 @@ function Canvas() {
             name="Rows"
             value={countOfRows}
             onChange={(event) => {
-              setCountOfRows(event.target.value);
+              setCountOfRows(Number(event.target.value));
             }}
           />
           <br />
@@ -97,7 +103,7 @@ function Canvas() {
             name="Columns"
             value={countOfColumns}
             onChange={(event) => {
-              setCountOfColumns(event.target.value);
+              setCountOfColumns(Number(event.target.value));
             }}
           />
           <br />
@@ -110,7 +116,7 @@ function Canvas() {
             name="x1"
             value={x1}
             onChange={(event) => {
-              setX1(event.target.value);
+              setX1(Number(event.target.value));
             }}
           />
           <label>y1</label>
@@ -119,7 +125,7 @@ function Canvas() {
             name='y1'
             value={y1}
             onChange={(event) => {
-              setY1(event.target.value);
+              setY1(Number(event.target.value));
             }}
           />
           <label>x2</label>
@@ -128,7 +134,7 @@ function Canvas() {
             name='x2'
             value={x2}
             onChange={(event) => {
-              setX2(event.target.value);
+              setX2(Number(event.target.value));
             }}
           />
           <label>y2</label>
@@ -137,7 +143,7 @@ function Canvas() {
             name='y2'
             value={y2}
             onChange={(event) => {
-              setY2(event.target.value);
+              setY2(Number(event.target.value));
             }}
           />
           <br />
