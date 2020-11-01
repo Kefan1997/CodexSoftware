@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import ReactDOM from "react-dom";
 import "./index.css";
 
@@ -7,18 +7,18 @@ function Canvas() {
   const [countOfColumns, setCountOfColumns] = useState(6);
   const [lineBreak, setLineBreak] = useState(null);
   const [arrayCanvas, setArrayCanvas] = useState([]);
-  const [fillColor, setFillColor] = useState('red');
+  const [fillColor, setFillColor] = useState("red");
   const [x1, setX1] = useState(1);
   const [y1, setY1] = useState(1);
   const [x2, setX2] = useState(4);
   const [y2, setY2] = useState(4);
   const [xColor, setXColor] = useState(3);
-  const [yColor, setYColor] = useState(4);
+  const [yColor, setYColor] = useState(3);
 
   const getCoordinate = (x, y) => x + countOfColumns * y;
 
   const drawHorizontal = (min, max, copyArray) => {
-      const arrayWithHorizontalLines = copyArray.map((square, index) => {
+    const arrayWithHorizontalLines = copyArray.map((square, index) => {
       if (index <= max && index >= min) {
         const obj = { ...square, color: "black" };
         return obj;
@@ -30,7 +30,7 @@ function Canvas() {
   };
 
   const drawVertical = (min, max, copyArray) => {
-      const arrayVerticalLines = copyArray.map((square, index) => {
+    const arrayVerticalLines = copyArray.map((square, index) => {
       if (index >= min && index <= max && (index - min) % lineBreak === 0) {
         const obj = { ...square, color: "black" };
         return obj;
@@ -46,15 +46,15 @@ function Canvas() {
     if (!(x1 === x2 || y1 === y2)) {
       alert("You can draw line only horizontal or vertical!!!");
     } else {
-    const min = Math.min(getCoordinate(x1, y1), getCoordinate(x2, y2));
+      const min = Math.min(getCoordinate(x1, y1), getCoordinate(x2, y2));
 
-    const max = Math.max(getCoordinate(x1, y1), getCoordinate(x2, y2));
+      const max = Math.max(getCoordinate(x1, y1), getCoordinate(x2, y2));
 
-    if (y1 === y2) {
-      setArrayCanvas(drawHorizontal(min, max, copyArray));
-    } else if (x1 === x2) {
-      setArrayCanvas(drawVertical(min, max, copyArray));
-    }
+      if (y1 === y2) {
+        setArrayCanvas(drawHorizontal(min, max, copyArray));
+      } else if (x1 === x2) {
+        setArrayCanvas(drawVertical(min, max, copyArray));
+      }
     }
   };
 
@@ -72,7 +72,7 @@ function Canvas() {
     const max4 = Math.max(getCoordinate(x2, y1), getCoordinate(x2, y2));
 
     let copyArray = drawHorizontal(min1, max1, arrayCanvas);
-    copyArray =  drawHorizontal(min2, max2, copyArray);
+    copyArray = drawHorizontal(min2, max2, copyArray);
     copyArray = drawVertical(min3, max3, copyArray);
     copyArray = drawVertical(min4, max4, copyArray);
     setArrayCanvas(copyArray);
@@ -85,23 +85,32 @@ function Canvas() {
     );
   };
 
-  const fillCanvas = (x1, y1, fillColor) => {
-    alert(`xColor: ${xColor}, yColor: ${yColor}, fillColor: ${fillColor}`)
-  }
+  const fillCanvas = (
+    x,
+    y,
+    countOfColumns,
+    countOfRows,
+    fillColor,
+    copyArrayCanvas
+  ) => {
+    let copyArray = copyArrayCanvas.slice();
+    if (
+      x >= 0 &&
+      x < countOfColumns &&
+      y >= 0 &&
+      y < countOfRows &&
+      copyArray[getCoordinate(x, y)].color === "white" &&
+      copyArray[getCoordinate(x, y)].color !== fillColor 
+    ) {
+      copyArray[getCoordinate(x, y)].color = fillColor;
 
-//   floodFill4(Uint32* screenBuffer, int w, int h,
-//     int x, int y, Uint32 newColor, Uint32 oldColor)
-// {
-// if(x >= 0 && x < w && y >= 0 && y < h && screenBuffer[y][x] == oldColor && screenBuffer[y][x] != newColor)
-// {
-// screenBuffer[y * w + x] = newColor; //set color before starting recursion!
-
-// floodFill4(screenBuffer, w, h, x + 1, y    , newColor, oldColor);
-// floodFill4(screenBuffer, w, h, x - 1, y    , newColor, oldColor);
-// floodFill4(screenBuffer, w, h, x    , y + 1, newColor, oldColor);
-// floodFill4(screenBuffer, w, h, x    , y - 1, newColor, oldColor);
-// }
-// }
+      fillCanvas(x + 1, y, countOfColumns, countOfRows, fillColor, copyArray);
+      fillCanvas(x - 1, y, countOfColumns, countOfRows, fillColor, copyArray);
+      fillCanvas(x, y + 1, countOfColumns, countOfRows, fillColor, copyArray);
+      fillCanvas(x, y - 1, countOfColumns, countOfRows, fillColor, copyArray);
+    }
+    setArrayCanvas(copyArray);
+  };
 
   return (
     <div className="canvas">
@@ -190,16 +199,16 @@ function Canvas() {
             onChange={(event) => {
               setYColor(Number(event.target.value));
             }}
-          /> 
+          />
           <label>Color</label>
           <input
             type="text"
-            name='fillColor'
+            name="fillColor"
             value={fillColor}
             onChange={(event) => {
               setFillColor(event.target.value);
             }}
-          />         
+          />
           <br />
           <br />
           <input
@@ -219,7 +228,16 @@ function Canvas() {
           />
           <input
             type="button"
-            onClick={() => fillCanvas(xColor, yColor, fillColor)}
+            onClick={() =>
+              fillCanvas(
+                xColor,
+                yColor,
+                countOfColumns,
+                countOfRows,
+                fillColor,
+                arrayCanvas
+              )
+            }
             defaultValue="Bucket Fill"
           />
         </form>
