@@ -94,25 +94,36 @@ function Canvas() {
     copyArrayCanvas
   ) => {
     let copyArray = copyArrayCanvas.slice();
-    let X1 = x;
-    let Y1 = y;
+    console.log(copyArray);
     if (
       x >= 0 &&
       x < countOfColumns &&
       y >= 0 &&
       y < countOfRows &&
-      // copyArray[getCoordinate(x, y)].color !== "black" &&
       copyArray[getCoordinate(x, y)].color === "white" &&
       copyArray[getCoordinate(x, y)].color !== fillColor
-      // copyArray[getCoordinate(x, y)].color === "white"
     ) {
+      
       copyArray[x + countOfColumns * y] = { color: fillColor };
-      fillCanvas(x + 1, y, countOfColumns, countOfRows, fillColor, copyArray);
-      fillCanvas(x - 1, y, countOfColumns, countOfRows, fillColor, copyArray);
-      fillCanvas(x, y + 1, countOfColumns, countOfRows, fillColor, copyArray);
-      fillCanvas(x, y - 1, countOfColumns, countOfRows, fillColor, copyArray);
+      // let secondCopyArray = copyArray.slice(copyArray[x + countOfColumns * y] = { color: fillColor });
+
+      // let X1 = x + 1;
+    //   // let Y1 = y + 1;
+      // fillCanvas(X1, y, countOfColumns, countOfRows, fillColor, secondCopyArray);
+    //   // setArrayCanvas(copyArray);
+
+    //   X1 = x - 1;
+      // fillCanvas(X1, y, countOfColumns, countOfRows, fillColor, secondCopyArray);
+      
+      // console.log(X1);
+      // fillCanvas(x, Y1, countOfColumns, countOfRows, fillColor, secondCopyArray);
+      // setArrayCanvas(copyArray);
+
+      // Y1 = y - 1;
+      // fillCanvas(x, Y1, countOfColumns, countOfRows, fillColor, secondCopyArray);
+      // setArrayCanvas(copyArray);
+
     }
-    console.log(copyArray);
     // setArrayCanvas(copyArray);
   };
 
