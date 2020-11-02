@@ -94,22 +94,26 @@ function Canvas() {
     copyArrayCanvas
   ) => {
     let copyArray = copyArrayCanvas.slice();
+    let X1 = x;
+    let Y1 = y;
     if (
       x >= 0 &&
       x < countOfColumns &&
       y >= 0 &&
       y < countOfRows &&
+      // copyArray[getCoordinate(x, y)].color !== "black" &&
       copyArray[getCoordinate(x, y)].color === "white" &&
-      copyArray[getCoordinate(x, y)].color !== fillColor 
+      copyArray[getCoordinate(x, y)].color !== fillColor
+      // copyArray[getCoordinate(x, y)].color === "white"
     ) {
-      copyArray[getCoordinate(x, y)].color = fillColor;
-
+      copyArray[x + countOfColumns * y] = { color: fillColor };
       fillCanvas(x + 1, y, countOfColumns, countOfRows, fillColor, copyArray);
       fillCanvas(x - 1, y, countOfColumns, countOfRows, fillColor, copyArray);
       fillCanvas(x, y + 1, countOfColumns, countOfRows, fillColor, copyArray);
       fillCanvas(x, y - 1, countOfColumns, countOfRows, fillColor, copyArray);
     }
-    setArrayCanvas(copyArray);
+    console.log(copyArray);
+    // setArrayCanvas(copyArray);
   };
 
   return (
@@ -213,30 +217,45 @@ function Canvas() {
           <br />
           <input
             type="button"
+            className={"button_canvas"}
             onClick={() => drawCanvas()}
             defaultValue="Draw Canvas"
           />
           <input
             type="button"
-            onClick={() => drawLine(x1, y1, x2, y2)}
+            className={arrayCanvas.length ? "button_active" : "button_inactive"}
+            onClick={
+              arrayCanvas.length
+                ? () => drawLine(x1, y1, x2, y2)
+                : () => alert("Draw Canvas")
+            }
             defaultValue="Draw line "
           />
           <input
             type="button"
-            onClick={() => drawRectangle(x1, y1, x2, y2)}
+            className={arrayCanvas.length ? "button_active" : "button_inactive"}
+            onClick={
+              arrayCanvas.length
+                ? () => drawRectangle(x1, y1, x2, y2)
+                : () => alert("Draw Canvas")
+            }
             defaultValue="Draw rectangle "
           />
           <input
             type="button"
-            onClick={() =>
-              fillCanvas(
-                xColor,
-                yColor,
-                countOfColumns,
-                countOfRows,
-                fillColor,
-                arrayCanvas
-              )
+            className={arrayCanvas.length ? "button_active" : "button_inactive"}
+            onClick={
+              arrayCanvas.length
+                ? () =>
+                    fillCanvas(
+                      xColor,
+                      yColor,
+                      countOfColumns,
+                      countOfRows,
+                      fillColor,
+                      arrayCanvas
+                    )
+                : () => alert("Draw Canvas")
             }
             defaultValue="Bucket Fill"
           />
