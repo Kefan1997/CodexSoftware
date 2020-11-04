@@ -3,7 +3,6 @@
 
 ##### The application is a simple paint.
 
-#### The button Bucket Fill doesn't work correct.
 #### The application without any test.
 
 #### You can try it [here](https://codex-software-canvas-oleg-rashinskiy.netlify.app/).

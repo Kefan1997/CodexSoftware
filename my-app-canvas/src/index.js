@@ -93,38 +93,55 @@ function Canvas() {
     fillColor,
     copyArrayCanvas
   ) => {
-    let copyArray = copyArrayCanvas.slice();
-    console.log(copyArray);
+    console.log(copyArrayCanvas);
     if (
       x >= 0 &&
       x < countOfColumns &&
       y >= 0 &&
       y < countOfRows &&
-      copyArray[getCoordinate(x, y)].color === "white" &&
-      copyArray[getCoordinate(x, y)].color !== fillColor
+      copyArrayCanvas[getCoordinate(x, y)].color === "white" &&
+      copyArrayCanvas[getCoordinate(x, y)].color !== fillColor
     ) {
-      
-      copyArray[x + countOfColumns * y] = { color: fillColor };
-      // let secondCopyArray = copyArray.slice(copyArray[x + countOfColumns * y] = { color: fillColor });
+      copyArrayCanvas[x + countOfColumns * y] = { color: fillColor };
+      let X1 = x + 1;
+      let Y1 = y + 1;
+      fillCanvas(
+        X1,
+        y,
+        countOfColumns,
+        countOfRows,
+        fillColor,
+        copyArrayCanvas
+      );
+      X1 = x - 1;
+      fillCanvas(
+        X1,
+        y,
+        countOfColumns,
+        countOfRows,
+        fillColor,
+        copyArrayCanvas
+      );
 
-      // let X1 = x + 1;
-    //   // let Y1 = y + 1;
-      // fillCanvas(X1, y, countOfColumns, countOfRows, fillColor, secondCopyArray);
-    //   // setArrayCanvas(copyArray);
+      fillCanvas(
+        x,
+        Y1,
+        countOfColumns,
+        countOfRows,
+        fillColor,
+        copyArrayCanvas
+      );
 
-    //   X1 = x - 1;
-      // fillCanvas(X1, y, countOfColumns, countOfRows, fillColor, secondCopyArray);
-      
-      // console.log(X1);
-      // fillCanvas(x, Y1, countOfColumns, countOfRows, fillColor, secondCopyArray);
-      // setArrayCanvas(copyArray);
-
-      // Y1 = y - 1;
-      // fillCanvas(x, Y1, countOfColumns, countOfRows, fillColor, secondCopyArray);
-      // setArrayCanvas(copyArray);
-
+      Y1 = y - 1;
+      fillCanvas(
+        x,
+        Y1,
+        countOfColumns,
+        countOfRows,
+        fillColor,
+        copyArrayCanvas
+      );
     }
-    // setArrayCanvas(copyArray);
   };
 
   return (
@@ -257,15 +274,18 @@ function Canvas() {
             className={arrayCanvas.length ? "button_active" : "button_inactive"}
             onClick={
               arrayCanvas.length
-                ? () =>
+                ? () => {
+                    let copyArrayCanvas = arrayCanvas.slice();
                     fillCanvas(
                       xColor,
                       yColor,
                       countOfColumns,
                       countOfRows,
                       fillColor,
-                      arrayCanvas
-                    )
+                      copyArrayCanvas
+                    );
+                    setArrayCanvas(copyArrayCanvas)
+                  }
                 : () => alert("Draw Canvas")
             }
             defaultValue="Bucket Fill"
